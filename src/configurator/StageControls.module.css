@@ -1,0 +1,76 @@
+.bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 20px;
+  min-height: 65px;
+  padding: 10px 24px;
+  border-top: 1px solid var(--line);
+}
+
+.group,
+.views {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+}
+
+.views {
+  margin-left: auto;
+}
+
+.button,
+.step,
+.light {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0 11px;
+  border: 1px solid transparent;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.button:hover,
+.step:hover {
+  border-color: var(--line);
+}
+
+.button[aria-pressed='true'] {
+  border-color: var(--ink);
+}
+
+.light {
+  padding: 0 20px;
+  background: var(--ink);
+  color: var(--bg);
+  font-weight: 600;
+}
+
+.light[data-lit='true'] {
+  background: var(--warm);
+  color: var(--ink);
+}
+
+.button:focus-visible,
+.step:focus-visible,
+.light:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.step {
+  padding: 0;
+}
+
+@media (max-width: 767px), (max-height: 599px) {
+  .bar {
+    padding: 8px 16px;
+  }
+
+  .views {
+    margin-left: 0;
+  }
+}

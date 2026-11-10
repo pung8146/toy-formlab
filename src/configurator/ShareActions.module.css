@@ -1,0 +1,70 @@
+.actions {
+  display: grid;
+  gap: 10px;
+}
+
+.row {
+  display: flex;
+  gap: 8px;
+}
+
+.primary,
+.button,
+.quiet {
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.primary,
+.primary + .button {
+  flex: 1;
+}
+
+.primary {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--bg);
+}
+
+.quiet {
+  justify-self: start;
+  padding: 0;
+  border: 0;
+  color: var(--ink-soft);
+}
+
+.primary:focus-visible,
+.button:focus-visible,
+.quiet:focus-visible,
+.manual input:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.manual {
+  display: grid;
+  gap: 6px;
+  font-size: 13px;
+}
+
+.manual input {
+  min-height: 44px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 13px;
+}
+
+.confirm {
+  display: grid;
+  gap: 8px;
+  font-size: 14px;
+}

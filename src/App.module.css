@@ -1,0 +1,118 @@
+.app {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  height: 100svh;
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px 14px;
+  padding: 4px 24px;
+  border-bottom: 1px solid var(--line);
+  font-size: 14px;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.concept {
+  color: var(--ink-soft);
+  font-size: 13px;
+}
+
+.headerButton {
+  min-height: 44px;
+  margin-left: auto;
+  padding: 0 4px;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.headerButton:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 348px;
+  min-height: 0;
+}
+
+.stage {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  min-height: 0;
+  min-width: 0;
+}
+
+.canvas {
+  position: relative;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding: 22px 24px 20px;
+  border-left: 1px solid var(--line);
+  overflow-y: auto;
+}
+
+.footer {
+  margin-top: auto;
+}
+
+.summary {
+  margin: 0;
+  max-width: 60ch;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+.notice {
+  min-height: 1.5em;
+  margin: 6px 0 10px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+@media (max-width: 767px), (max-height: 599px) {
+  .app {
+    display: block;
+    height: auto;
+  }
+
+  .main {
+    display: block;
+  }
+
+  .canvas {
+    height: clamp(200px, 46svh, 520px);
+  }
+
+  .panel {
+    border-left: 0;
+    border-top: 1px solid var(--line);
+    overflow: visible;
+    padding: 20px 16px 32px;
+  }
+
+  .header {
+    padding: 4px 16px;
+  }
+}

@@ -1,0 +1,30 @@
+:root {
+  --bg: #f0efeb;
+  --ink: #20221f;
+  --ink-soft: #565954;
+  --line: #8b8d86;
+  --focus: #2f4fa8;
+  --danger: #a3271b;
+  --warm: #f5c98c;
+  font-family: 'Pretendard Variable', Pretendard, system-ui, -apple-system, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}
