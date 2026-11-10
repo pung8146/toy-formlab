@@ -1,10 +1,10 @@
 import { OrbitControls } from '@react-three/drei'
 import { useFrame, useThree } from '@react-three/fiber'
-import { useEffect, useLayoutEffect, useMemo, useRef } from 'react'
+import { useEffect, useLayoutEffect, useRef } from 'react'
 import { MathUtils, Spherical, Vector3, type PerspectiveCamera } from 'three'
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib'
-import { lampBounds } from '../product/lamp/ProceduralLamp'
-import { useLamp, type CameraPresetId } from '../product/lamp/store'
+import { CHAIR_BOUNDS } from '../product/chair/ChairModel'
+import { useChair, type CameraPresetId } from '../product/chair/store'
 import { prefersReducedMotion } from './motion'
 
 const MIN_POLAR = 0.22
@@ -21,15 +21,14 @@ type Pose = { theta: number; phi: number; radius: number; center: Vector3 }
 type Tween = { from: Pose; to: Pose; elapsed: number }
 
 export function CameraRig() {
-  const arm = useLamp((s) => s.config.arm)
-  const command = useLamp((s) => s.cameraCommand)
+  const command = useChair((s) => s.cameraCommand)
   const camera = useThree((s) => s.camera) as PerspectiveCamera
   const aspect = useThree((s) => s.size.width / s.size.height)
   const invalidate = useThree((s) => s.invalidate)
   const controls = useRef<OrbitControlsImpl>(null)
   const tween = useRef<Tween | null>(null)
 
-  const { center, radius: boundRadius } = useMemo(() => lampBounds(arm), [arm])
+  const { center, radius: boundRadius } = CHAIR_BOUNDS
   const halfVertical = MathUtils.degToRad(camera.fov / 2)
   const halfHorizontal = Math.atan(Math.tan(halfVertical) * aspect)
   const fit = (boundRadius / Math.sin(Math.min(halfVertical, halfHorizontal))) * 1.15
@@ -76,7 +75,7 @@ export function CameraRig() {
     return () => orbit.removeEventListener('start', stop)
   }, [])
 
-  // Keep the viewer's chosen angle; only pull back if the new arm or window no longer fits.
+  // Keep the viewer's chosen angle; only pull back if a resized window no longer fits.
   useEffect(() => {
     const now = current()
     if (now.center.distanceTo(center) > 1e-4 || now.radius < fit) {

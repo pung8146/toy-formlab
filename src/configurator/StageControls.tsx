@@ -1,5 +1,5 @@
-import { PRESETS } from '../product/lamp/catalog'
-import { useLamp, type CameraCommand, type CameraPresetId } from '../product/lamp/store'
+import { PRESETS } from '../product/chair/catalog'
+import { useChair, type CameraCommand, type CameraPresetId } from '../product/chair/store'
 import styles from './StageControls.module.css'
 
 const VIEW_BUTTONS: { id: CameraPresetId; label: string }[] = [
@@ -21,10 +21,9 @@ const STEP_BUTTONS: { label: string; text: string; command: CameraCommand }[] = 
 ]
 
 export function StageControls() {
-  const config = useLamp((s) => s.config)
-  const lit = useLamp((s) => s.lit)
-  const viewerReady = useLamp((s) => s.viewerReady)
-  const { applyConfig, setLit, sendCamera } = useLamp.getState()
+  const config = useChair((s) => s.config)
+  const viewerReady = useChair((s) => s.viewerReady)
+  const { applyConfig, sendCamera } = useChair.getState()
 
   return (
     <div className={styles.bar}>
@@ -43,10 +42,6 @@ export function StageControls() {
       </div>
 
       {viewerReady && (
-        <>
-          <button type="button" className={styles.light} data-lit={lit} onClick={() => setLit(!lit)}>
-            {lit ? '불 끄기' : '불 켜기'}
-          </button>
 
           <div className={styles.views} role="group" aria-label="시점">
             {VIEW_BUTTONS.map(({ id, label }) => (
@@ -67,7 +62,6 @@ export function StageControls() {
               </button>
             ))}
           </div>
-        </>
       )}
     </div>
   )

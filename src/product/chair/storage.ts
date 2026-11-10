@@ -1,11 +1,11 @@
-import { validateConfig, type LampConfig } from './config'
+import { validateConfig, type ChairConfig } from './config'
 
-export const STORAGE_KEY = 'formlab:storage:v1'
+export const STORAGE_KEY = 'formlab:chair:v1'
 export const MAX_PRESETS = 10
 const VERSION = 1
 const MAX_NAME_LENGTH = 32
 
-export type SavedPreset = { id: string; name: string; createdAt: string; config: LampConfig }
+export type SavedPreset = { id: string; name: string; createdAt: string; config: ChairConfig }
 export type StorageLike = Pick<Storage, 'getItem' | 'setItem'>
 export type SavedState =
   | { status: 'ok'; presets: SavedPreset[] }
@@ -19,7 +19,7 @@ export function validatePresetName(input: string): { ok: true; name: string } | 
   return { ok: true, name }
 }
 
-export const createPreset = (name: string, config: LampConfig): SavedPreset => ({
+export const createPreset = (name: string, config: ChairConfig): SavedPreset => ({
   id: `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`,
   name,
   createdAt: new Date().toISOString(),

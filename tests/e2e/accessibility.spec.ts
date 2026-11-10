@@ -6,7 +6,7 @@ const axe = (page: Page) =>
 
 test('the main screen has no axe violations', async ({ page }) => {
   await page.goto('/')
-  await expect(page.getByRole('button', { name: '불 켜기' })).toBeVisible({ timeout: 20_000 })
+  await expect(page.getByRole('button', { name: '기본 시점' })).toBeVisible({ timeout: 20_000 })
   expect((await axe(page).analyze()).violations).toEqual([])
 })
 
@@ -18,9 +18,9 @@ test('the preset dialog has no axe violations', async ({ page }) => {
 
 test('arrow keys move within a radio group', async ({ page }) => {
   await page.goto('/')
-  await page.getByRole('radio', { name: '갓' }).focus()
+  await page.getByRole('radio', { name: '금속 부품' }).focus()
   await page.keyboard.press('ArrowLeft')
-  await expect(page.getByRole('radio', { name: '암' })).toBeChecked()
+  await expect(page.getByRole('radio', { name: '프레임' })).toBeChecked()
 })
 
 test('the dialog traps focus, closes on Escape, and returns focus', async ({ page }) => {
@@ -36,9 +36,9 @@ test('the dialog traps focus, closes on Escape, and returns focus', async ({ pag
 
 test('a keyboard user can edit, save, and load', async ({ page }) => {
   await page.goto('/')
-  await page.getByRole('radio', { name: '클레이' }).focus()
+  await page.getByRole('radio', { name: '피콕' }).focus()
   await page.keyboard.press('ArrowRight')
-  await expect(page.getByTestId('summary')).toContainText('세이지')
+  await expect(page.getByTestId('summary')).toContainText('망고')
   await page.getByRole('button', { name: '저장 목록' }).focus()
   await page.keyboard.press('Enter')
   await page.keyboard.type('키보드')
@@ -46,11 +46,11 @@ test('a keyboard user can edit, save, and load', async ({ page }) => {
   await expect(page.getByRole('dialog').getByRole('listitem')).toHaveCount(1)
 })
 
-test('reduced motion switches the lamp without a transition', async ({ page }) => {
+test('reduced motion moves the camera without a transition', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' })
   await page.goto('/')
-  await page.getByRole('button', { name: '불 켜기' }).click({ timeout: 30_000 })
-  await page.waitForTimeout(500)
+  await page.getByRole('button', { name: '정면' }).click({ timeout: 30_000 })
+  await page.waitForTimeout(300)
   const first = await page.locator('canvas').screenshot()
   await page.waitForTimeout(1000)
   expect(Buffer.compare(first, await page.locator('canvas').screenshot())).toBe(0)

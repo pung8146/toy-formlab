@@ -20,8 +20,7 @@
 }
 
 .button,
-.step,
-.light {
+.step {
   min-height: 44px;
   min-width: 44px;
   padding: 0 11px;
@@ -42,21 +41,8 @@
   border-color: var(--ink);
 }
 
-.light {
-  padding: 0 20px;
-  background: var(--ink);
-  color: var(--bg);
-  font-weight: 600;
-}
-
-.light[data-lit='true'] {
-  background: var(--warm);
-  color: var(--ink);
-}
-
 .button:focus-visible,
-.step:focus-visible,
-.light:focus-visible {
+.step:focus-visible {
   outline: 2px solid var(--focus);
   outline-offset: 2px;
 }

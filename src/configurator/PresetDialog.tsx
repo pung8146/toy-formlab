@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react'
-import { useLamp } from '../product/lamp/store'
+import { useChair } from '../product/chair/store'
 import styles from './PresetDialog.module.css'
 
 export function PresetDialog() {
-  const open = useLamp((s) => s.presetDialogOpen)
-  const saved = useLamp((s) => s.saved)
-  const storageStatus = useLamp((s) => s.storageStatus)
-  const { setPresetDialogOpen, savePreset, deletePreset, loadPreset } = useLamp.getState()
+  const open = useChair((s) => s.presetDialogOpen)
+  const saved = useChair((s) => s.saved)
+  const storageStatus = useChair((s) => s.storageStatus)
+  const { setPresetDialogOpen, savePreset, deletePreset, loadPreset } = useChair.getState()
   const dialog = useRef<HTMLDialogElement>(null)
   const [name, setName] = useState('')
   const [error, setError] = useState('')

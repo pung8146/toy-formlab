@@ -2,21 +2,21 @@ import { describeConfig, PartControls } from './configurator/PartControls'
 import { PresetDialog } from './configurator/PresetDialog'
 import { ShareActions } from './configurator/ShareActions'
 import { StageControls } from './configurator/StageControls'
-import { useLamp } from './product/lamp/store'
+import { useChair } from './product/chair/store'
 import { ViewerBoundary } from './viewer/ViewerBoundary'
 import styles from './App.module.css'
 
 export function App() {
-  const config = useLamp((s) => s.config)
-  const notice = useLamp((s) => s.notice)
-  const setPresetDialogOpen = useLamp((s) => s.setPresetDialogOpen)
+  const config = useChair((s) => s.config)
+  const notice = useChair((s) => s.notice)
+  const setPresetDialogOpen = useChair((s) => s.setPresetDialogOpen)
 
   return (
     <div className={styles.app}>
       <header className={styles.header}>
         <h1>FormLab</h1>
-        <span>Lamp 01</span>
-        <span className={styles.concept}>인터랙티브 컨셉 모델</span>
+        <span>Lounge Chair</span>
+        <span className={styles.concept}>3D 모델 SheenChair · Wayfair · CC0</span>
         <button type="button" className={styles.headerButton} onClick={() => setPresetDialogOpen(true)}>
           저장 목록
         </button>

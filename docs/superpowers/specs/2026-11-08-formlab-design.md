@@ -1,5 +1,7 @@
 # FormLab 제품·경험·3D 설계안 (축소판)
 
+> **보존된 이전 문서.** 이 문서는 절차 모델 램프(Lamp 01) 버전 기준입니다. 2026-11-10에 제품을 실제 상품 GLB(SheenChair 라운지 체어)로 바꿨고, 현재 구조와 검증은 [README](../../../README.md)와 [검증 기록](../../verification/formlab-mvp.md)을 따릅니다.
+
 상태: **구현·배포 완료** · https://toy-formlab.vercel.app · 작성일: 2026-11-08 KST · 포트폴리오 용도 기준으로 축소
 
 작업 위치: `C:\Projects\toy-formlab` · 신규 독립 프로젝트. 기존 포트폴리오는 작업 범위 밖이다.

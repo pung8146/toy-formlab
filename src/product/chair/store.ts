@@ -1,10 +1,8 @@
 import { create } from 'zustand'
-import { COLOR_LABELS, DEFAULT_CONFIG, FINISHES, type ColorId, type FinishId, type PartId } from './catalog'
-import { setGeometryOption, setPartColor, setPartFinish, type LampConfig } from './config'
+import { DEFAULT_CONFIG, type PartId } from './catalog'
+import { setOption, type ChairConfig } from './config'
 import { MAX_PRESETS, createPreset, readSaved, validatePresetName, writeSaved, type SavedPreset, type SavedState } from './storage'
 import { parseConfigFragment, serializeConfig } from './url'
-
-type GeometryKey = 'base' | 'shade' | 'arm'
 
 export type CameraPresetId = 'default' | 'front' | 'side' | 'top'
 export type CameraCommand =
@@ -13,11 +11,10 @@ export type CameraCommand =
   | { type: 'tilt'; delta: number }
   | { type: 'zoom'; factor: number }
 
-type LampState = {
-  config: LampConfig
+type ChairState = {
+  config: ChairConfig
   selectedPart: PartId
   outlineVisible: boolean
-  lit: boolean
   notice: string
   cameraCommand: CameraCommand | null
   viewerReady: boolean
@@ -26,11 +23,8 @@ type LampState = {
   presetDialogOpen: boolean
   sendCamera: (command: CameraCommand) => void
   selectPart: (part: PartId) => void
-  setFinish: (part: PartId, finish: FinishId) => void
-  setColor: (part: PartId, color: ColorId) => void
-  setShape: (key: GeometryKey, value: LampConfig[GeometryKey]) => void
-  applyConfig: (config: LampConfig, notice?: string) => void
-  setLit: (lit: boolean) => void
+  setOption: (part: PartId, option: string) => void
+  applyConfig: (config: ChairConfig, notice?: string) => void
   setNotice: (notice: string) => void
   setViewerReady: (ready: boolean) => void
   setPresetDialogOpen: (open: boolean) => void
@@ -49,11 +43,10 @@ const browserStorage = () => {
   }
 }
 
-export const useLamp = create<LampState>((set, get) => ({
+export const useChair = create<ChairState>((set, get) => ({
   config: DEFAULT_CONFIG,
-  selectedPart: 'shade',
+  selectedPart: 'fabric',
   outlineVisible: false, // no outline until the visitor picks a part, so the first view stays clean
-  lit: false,
   notice: '',
   cameraCommand: null,
   viewerReady: false,
@@ -62,18 +55,8 @@ export const useLamp = create<LampState>((set, get) => ({
   presetDialogOpen: false,
   sendCamera: (cameraCommand) => set({ cameraCommand: { ...cameraCommand } }),
   selectPart: (selectedPart) => set({ selectedPart, outlineVisible: true }),
-  setFinish: (part, finish) => {
-    const before = get().config.finishes[part].color
-    const { config, colorChanged } = setPartFinish(get().config, part, finish)
-    const notice = colorChanged
-      ? `${COLOR_LABELS[before]} 색은 ${FINISHES[finish].label}에 없어 ${COLOR_LABELS[config.finishes[part].color]}로 바꿨습니다`
-      : ''
-    set({ config, notice })
-  },
-  setColor: (part, color) => set({ config: setPartColor(get().config, part, color), notice: '' }),
-  setShape: (key, value) => set({ config: setGeometryOption(get().config, key, value as never), notice: '' }),
+  setOption: (part, option) => set({ config: setOption(get().config, part, option), notice: '' }),
   applyConfig: (config, notice = '') => set({ config, notice }),
-  setLit: (lit) => set({ lit }),
   setNotice: (notice) => set({ notice }),
   setViewerReady: (viewerReady) => set({ viewerReady }),
   setPresetDialogOpen: (presetDialogOpen) => set({ presetDialogOpen }),
@@ -96,20 +79,20 @@ export const useLamp = create<LampState>((set, get) => ({
   loadPreset: (preset) => set({ config: preset.config, notice: `${preset.name} 구성을 불러왔습니다`, presetDialogOpen: false }),
 }))
 
-export const shareLink = (config: LampConfig) =>
+export const shareLink = (config: ChairConfig) =>
   `${location.origin}${location.pathname}${location.search}#${serializeConfig(config)}`
 
 function applyHash() {
   const result = parseConfigFragment(location.hash)
   if (!result) return
-  const { applyConfig } = useLamp.getState()
+  const { applyConfig } = useChair.getState()
   if (result.ok) applyConfig(result.config)
   else applyConfig(DEFAULT_CONFIG, `공유 링크를 읽을 수 없어 기본 구성으로 시작합니다. ${result.error}.`)
 }
 
-export function bootLamp() {
+export function bootChair() {
   const { status, presets } = readSaved(browserStorage())
-  useLamp.setState({ storageStatus: status, saved: presets })
+  useChair.setState({ storageStatus: status, saved: presets })
   applyHash()
   window.addEventListener('hashchange', applyHash)
 }

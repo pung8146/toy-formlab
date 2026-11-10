@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
-import { COLOR_LABELS, DEFAULT_CONFIG, FINISHES, FINISH_IDS, PART_IDS, PRESETS, type ColorId } from '../../src/product/lamp/catalog'
-import { setPartColor, setPartFinish, type LampConfig } from '../../src/product/lamp/config'
-import { parseConfigFragment, serializeConfig } from '../../src/product/lamp/url'
+import { DEFAULT_CONFIG, OPTIONS, PART_IDS, PRESETS } from '../../src/product/chair/catalog'
+import { setOption, type ChairConfig } from '../../src/product/chair/config'
+import { parseConfigFragment, serializeConfig } from '../../src/product/chair/url'
 
 const valid = serializeConfig(DEFAULT_CONFIG)
 const replaced = (key: string, value: string) => {
@@ -10,36 +10,20 @@ const replaced = (key: string, value: string) => {
   return params.toString()
 }
 
-const roundTrip = (config: LampConfig) => {
-  const result = parseConfigFragment(serializeConfig(config))
-  expect(result).toEqual({ ok: true, config })
+const roundTrip = (config: ChairConfig) => {
+  expect(parseConfigFragment(serializeConfig(config))).toEqual({ ok: true, config })
 }
 
 describe('serializeConfig', () => {
   it('uses a fixed key order', () => {
-    expect([...new URLSearchParams(valid).keys()]).toEqual([
-      'v', 'p', 'base', 'shade', 'arm',
-      'baseFinish', 'baseColor', 'stemFinish', 'stemColor', 'armFinish', 'armColor', 'shadeFinish', 'shadeColor',
-    ])
+    expect([...new URLSearchParams(valid).keys()]).toEqual(['v', 'p', 'fabric', 'frame', 'hardware'])
   })
 
-  it('round-trips shape changes and presets', () => {
-    roundTrip({ ...DEFAULT_CONFIG, base: 'disc' })
-    roundTrip({ ...DEFAULT_CONFIG, shade: 'dome' })
-    roundTrip({ ...DEFAULT_CONFIG, arm: 'long' })
-    for (const preset of PRESETS) roundTrip(preset.config)
-  })
-
-  it('round-trips every finish and color on every part', () => {
+  it('round-trips every option and every preset', () => {
     for (const part of PART_IDS) {
-      for (const finish of FINISH_IDS) {
-        const base = setPartFinish(DEFAULT_CONFIG, part, finish).config
-        for (const color of Object.keys(FINISHES[finish].colors) as ColorId[]) {
-          expect(COLOR_LABELS[color]).toBeTruthy()
-          roundTrip(setPartColor(base, part, color))
-        }
-      }
+      for (const option of Object.keys(OPTIONS[part])) roundTrip(setOption(DEFAULT_CONFIG, part, option))
     }
+    for (const preset of PRESETS) roundTrip(preset.config)
   })
 })
 
@@ -56,13 +40,13 @@ describe('parseConfigFragment', () => {
   it.each([
     ['unrelated text', 'hello'],
     ['unsupported version', replaced('v', '2')],
-    ['other product', replaced('p', 'chair-01')],
-    ['unknown enum', replaced('base', 'hexagon')],
-    ['color outside the finish', replaced('baseColor', 'silver')],
-    ['duplicate key', `${valid}&base=disc`],
+    ['the old lamp product', replaced('p', 'lamp-01')],
+    ['unknown option', replaced('fabric', 'leopard')],
+    ['option from another part', replaced('frame', 'brass')],
+    ['duplicate key', `${valid}&fabric=mango`],
     ['unknown key', `${valid}&extra=1`],
-    ['missing key', valid.replace(/&shadeColor=[^&]*/, '')],
-    ['bad encoding', replaced('base', 'x').replace('base=x', 'base=%E0%A4%A')],
+    ['missing key', valid.replace(/&hardware=[^&]*/, '')],
+    ['bad encoding', replaced('fabric', 'x').replace('fabric=x', 'fabric=%E0%A4%A')],
     ['too long', `${valid}&${'x'.repeat(1024)}`],
   ])('rejects %s as a whole', (_name, fragment) => {
     expect(parseConfigFragment(fragment)).toMatchObject({ ok: false })

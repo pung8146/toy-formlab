@@ -1,15 +1,15 @@
 import { useState } from 'react'
-import { DEFAULT_CONFIG } from '../product/lamp/catalog'
-import { shareLink, useLamp } from '../product/lamp/store'
+import { DEFAULT_CONFIG } from '../product/chair/catalog'
+import { shareLink, useChair } from '../product/chair/store'
 import styles from './ShareActions.module.css'
 
 export function ShareActions() {
-  const { setPresetDialogOpen, setNotice, applyConfig } = useLamp.getState()
+  const { setPresetDialogOpen, setNotice, applyConfig } = useChair.getState()
   const [manualLink, setManualLink] = useState('')
   const [confirmingReset, setConfirmingReset] = useState(false)
 
   const copyLink = async () => {
-    const link = shareLink(useLamp.getState().config)
+    const link = shareLink(useChair.getState().config)
     try {
       await navigator.clipboard.writeText(link)
       setManualLink('')

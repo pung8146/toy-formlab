@@ -13,7 +13,8 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "test:unit": "vitest run",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "build:model": "gltf-transform optimize assets-src/SheenChair.glb public/models/chair.glb --compress meshopt --texture-compress webp --texture-size 1024 --join false --flatten false --instance false --palette false --simplify false"
   },
   "dependencies": {
     "@react-three/drei": "10.7.9",
@@ -26,6 +27,7 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "4.14.0",
+    "@gltf-transform/cli": "4.5.1",
     "@playwright/test": "1.65.0",
     "@types/node": "26.6.6",
     "@types/react": "19.3.0",

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { DEFAULT_CONFIG, PRESETS } from '../../src/product/lamp/catalog'
-import { MAX_PRESETS, STORAGE_KEY, createPreset, readSaved, validatePresetName, writeSaved, type SavedPreset } from '../../src/product/lamp/storage'
+import { DEFAULT_CONFIG, PRESETS } from '../../src/product/chair/catalog'
+import { MAX_PRESETS, STORAGE_KEY, createPreset, readSaved, validatePresetName, writeSaved, type SavedPreset } from '../../src/product/chair/storage'
 
 function fakeStorage(initial?: string) {
   const data = new Map<string, string>()
@@ -38,8 +38,8 @@ describe('createPreset', () => {
   it('stores a snapshot unaffected by later config objects', () => {
     const config = structuredClone(PRESETS[1].config)
     const saved = createPreset('A', config)
-    config.base = 'square'
-    expect(saved.config.base).toBe('disc')
+    config.fabric = 'plum'
+    expect(saved.config.fabric).not.toBe('plum')
   })
 })
 
@@ -57,7 +57,7 @@ describe('readSaved', () => {
 
   it('skips damaged items and keeps valid ones', () => {
     const good = preset('A')
-    const bad = { ...preset('B'), config: { ...DEFAULT_CONFIG, base: 'hexagon' } }
+    const bad = { ...preset('B'), config: { ...DEFAULT_CONFIG, fabric: 'leopard' } }
     const result = readSaved(fakeStorage(envelope([bad, 'nope', good])))
     expect(result).toEqual({ status: 'ok', presets: [good] })
   })
@@ -90,4 +90,8 @@ describe('writeSaved', () => {
 
 it('caps presets at ten', () => {
   expect(MAX_PRESETS).toBe(10)
+})
+
+it('stores chair presets under their own key so old lamp presets are left alone', () => {
+  expect(STORAGE_KEY).toBe('formlab:chair:v1')
 })

@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test'
 
-const KEY = 'formlab:storage:v1'
+const KEY = 'formlab:chair:v1'
 const summary = (page: Page) => page.getByTestId('summary')
 
 async function savePreset(page: Page, name: string) {
@@ -13,7 +13,7 @@ async function savePreset(page: Page, name: string) {
 
 test('a saved preset restores the snapshot taken at save time', async ({ page }) => {
   await page.goto('/')
-  await page.getByRole('radio', { name: '코발트' }).check()
+  await page.getByRole('radio', { name: '플럼' }).check()
   const saved = await summary(page).textContent()
   const dialog = await savePreset(page, '내 램프')
   await dialog.getByRole('button', { name: '닫기' }).click()
@@ -69,12 +69,12 @@ test('a copied link opens the latest config in a new browser', async ({ browser 
 
 test('a pasted link applies in an already open tab', async ({ page }) => {
   await page.goto('/')
-  await page.getByRole('button', { name: 'Graphite' }).click()
+  await page.getByRole('button', { name: 'Mango' }).click()
   const expected = await summary(page).textContent()
-  await page.getByRole('button', { name: 'Chalk' }).click()
+  await page.getByRole('button', { name: 'Oat' }).click()
   await page.evaluate(() => { location.hash = 'v=1' })
   await expect(page.getByRole('status')).toContainText('공유 링크')
-  expect(expected).toContain('그래파이트')
+  expect(expected).toContain('망고')
 })
 
 test('when the clipboard fails the link is offered in a field', async ({ page }) => {
@@ -83,7 +83,7 @@ test('when the clipboard fails the link is offered in a field', async ({ page })
   })
   await page.goto('/')
   await page.getByRole('button', { name: '링크 복사' }).click()
-  await expect(page.getByLabel('공유 링크')).toHaveValue(/#v=1&p=lamp-01/)
+  await expect(page.getByLabel('공유 링크')).toHaveValue(/#v=1&p=chair-01/)
 })
 
 test('an invalid link shows a warning and the default without touching presets', async ({ page }) => {
@@ -93,7 +93,7 @@ test('an invalid link shows a warning and the default without touching presets',
   await page.goto('/#v=9&p=lamp-01')
   await page.reload()
   await expect(page.getByRole('status')).toContainText('공유 링크')
-  await expect(summary(page)).toContainText('사각 받침, 원뿔 갓')
+  await expect(summary(page)).toContainText('원단 피콕')
   expect(await page.evaluate((key) => localStorage.getItem(key), KEY)).toBe(before)
 })
 
@@ -122,15 +122,15 @@ test('blocked localStorage does not break the app', async ({ page }) => {
     Object.defineProperty(window, 'localStorage', { get() { throw new DOMException('denied', 'SecurityError') } })
   })
   await page.goto('/')
-  await page.getByRole('radio', { name: '코발트' }).check()
-  await expect(summary(page)).toContainText('코발트')
+  await page.getByRole('radio', { name: '플럼' }).check()
+  await expect(summary(page)).toContainText('플럼')
 })
 
 test('resetting the config asks first and restores the default', async ({ page }) => {
   await page.goto('/')
-  await page.getByRole('radio', { name: '코발트' }).check()
+  await page.getByRole('radio', { name: '플럼' }).check()
   await page.getByRole('button', { name: '구성 초기화' }).click()
-  await expect(summary(page)).toContainText('코발트')
+  await expect(summary(page)).toContainText('플럼')
   await page.getByRole('button', { name: '초기화 확인' }).click()
-  await expect(summary(page)).not.toContainText('코발트')
+  await expect(summary(page)).not.toContainText('플럼')
 })
